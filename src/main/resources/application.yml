@@ -1,0 +1,10 @@
+spring:
+  datasource:
+    url: jdbc:postgresql://localhost:54320/test_spring
+    username: postgres
+    password: root
+  flyway:
+    schemas: public
+  kafka:
+    bootstrap-servers: localhost:9092
+    consumer.group-id: myGroup
