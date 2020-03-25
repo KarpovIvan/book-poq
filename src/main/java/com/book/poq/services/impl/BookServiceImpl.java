@@ -1,6 +1,7 @@
 package com.book.poq.services.impl;
 
 import com.book.poq.adapters.AdvertAdapter;
+import com.book.poq.model.Advert;
 import com.book.poq.model.Book;
 import com.book.poq.repositories.BookRepository;
 import com.book.poq.services.BookService;
@@ -26,6 +27,7 @@ public class BookServiceImpl implements BookService {
         return bookRepository.getBookById(id)
                 .filter(bookValidatorService::validate)
                 .flatMap(b -> advertAdapter.getAdvert(0)
+                        .defaultIfEmpty(new Advert())
                         .map(advert -> {
                                 b.setAdvert(advert);
                                 return b;
