@@ -8,10 +8,10 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.web.reactive.function.client.WebClient;
 
 @Configuration
-@EnableConfigurationProperties(AdvertProperties.class)
-public class AdvertConfiguration {
+@EnableConfigurationProperties(PoqAdvertProperties.class)
+public class PoqAdvertConfiguration {
     @Bean
-    public AdvertAdapter advertAdapter(WebClient.Builder builder, AdvertProperties advertProperties){
-        return new AdvertAdapterImpl(builder, advertProperties);
+    public AdvertAdapter advertAdapter(WebClient.Builder builder, PoqAdvertProperties poqAdvertProperties){
+        return new AdvertAdapterImpl(builder, poqAdvertProperties);
     }
 }

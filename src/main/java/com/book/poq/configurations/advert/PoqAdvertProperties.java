@@ -3,7 +3,7 @@ package com.book.poq.configurations.advert;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 
 @ConfigurationProperties("poq.advert")
-public class AdvertProperties {
+public class PoqAdvertProperties {
     private String url;
 
     public String getUrl() {
