@@ -92,5 +92,12 @@ services:
   mongo:
     image: mongo:latest
     mem_limit: 350m
+    volumes:
+      - mongodb:/data/db
+      - mongoconfig:/data/config
     ports:
       - 27017:27017
+
+volumes:
+  mongodb:
+  mongoconfig:
