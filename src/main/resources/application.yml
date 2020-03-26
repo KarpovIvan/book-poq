@@ -41,8 +41,6 @@ spring:
     url: jdbc:postgresql://postgres:5432/postgres
   kafka:
     bootstrap-servers: kafka:9092
-  data.mongo.host: mongo
-  data.mongo.port: 27017
 
 poq:
   advert:

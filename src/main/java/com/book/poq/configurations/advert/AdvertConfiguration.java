@@ -11,7 +11,7 @@ import org.springframework.web.reactive.function.client.WebClient;
 @EnableConfigurationProperties(AdvertProperties.class)
 public class AdvertConfiguration {
     @Bean
-    public AdvertAdapter advertAdapter(WebClient.Builder builder, AdvertProperties advertProperties){
+    public AdvertAdapter advertAdapter(WebClient.Builder builder, PoqAdvertProperties advertProperties){
         return new AdvertAdapterImpl(builder, advertProperties);
     }
 }
