@@ -1,10 +1,46 @@
 spring:
+  profiles:
+    active: docker
   datasource:
-    url: jdbc:postgresql://localhost:54320/test_spring
     username: postgres
-    password: root
+    password: password
   flyway:
     schemas: public
   kafka:
+    consumer:
+
+      value-deserializer: org.springframework.kafka.support.serializer.JsonDeserializer
+      properties:
+        spring.json.use.type.headers: false
+        spring.json.value.default.type: com.book.poq.model.Book
+      group-id: KafkaBookGroup
+
+---
+spring:
+  profiles: dev
+  datasource:
+    url: jdbc:postgresql://localhost:5432/postgres
+  kafka:
     bootstrap-servers: localhost:9092
-    consumer.group-id: myGroup
+
+poq:
+  advert:
+    url: http://localhost:8099/advert
+---
+spring:
+  profiles: docker
+  datasource:
+    url: jdbc:postgresql://postgres:5432/postgres
+  kafka:
+    bootstrap-servers: kafka:9092
+  data.mongo.host: mongo
+  data.mongo.port: 27017
+
+poq:
+  advert:
+    url: http://advert-poq:8099/advert
+
+
+logging:
+  level:
+  org.springframework.data.mongodb.core.MongoTemplate: DEBUG

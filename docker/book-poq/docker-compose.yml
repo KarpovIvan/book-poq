@@ -1,0 +1,97 @@
+version: "2.1"
+
+services:
+
+  book-poq:
+    image: book-poq
+    ports:
+      - 8080:8080
+    depends_on:
+      - postgres
+      - kafka
+      - advert-poq
+
+  book-generator-poq:
+    image: book-generator-poq
+    ports:
+      - 8098:8098
+    depends_on:
+      - kafka
+
+  advert-poq:
+    container_name: advert-poq
+    image: advert-poq
+    ports:
+      - 8099:8099
+    depends_on:
+      - elasticsearch
+      - mongo
+
+  postgres:
+    image: postgres:12
+    ports:
+      - 5432:5432
+    environment:
+      - POSTGRES_PASSWORD=password
+      - POSTGRES_USER=postgres
+      - POSTGRES_DB=postgres
+      - PGDATA=/var/lib/postgresql/data
+
+  zookeeper:
+    image: wurstmeister/zookeeper
+    ports:
+      - 2181:2181
+
+  kafka:
+    image: wurstmeister/kafka
+    hostname: kafka
+    ports:
+      - 9092:9092
+      - 9093:9093
+    environment:
+      - KAFKA_ADVERTISED_HOST_NAME=kafka
+      - KAFKA_ZOOKEEPER_CONNECT=zookeeper:2181
+      - KAFKA_ADVERTISED_PORT=9092
+    depends_on:
+      zookeeper:
+        condition: service_started
+
+  elasticsearch:
+    image: docker.elastic.co/elasticsearch/elasticsearch:6.4.3
+    restart: always
+    hostname: elasticsearch
+    container_name: quota_elasticsearch1
+    environment:
+      - node.name=quota
+      - cluster.name=quota-cluster
+      - http.host=elasticsearch
+      - http.port=9200
+      - transport.publish_host=elasticsearch
+      - http.publish_host=elasticsearch
+      - transport.tcp.port=9300
+      - transport.tcp.connect_timeout=10s
+      - discovery.zen.minimum_master_nodes=1
+      - discovery.type=single-node
+      - http.cors.enabled=true
+      - node.data=true
+      - node.master=true
+      - xpack.security.enabled=false
+      - xpack.monitoring.enabled=false
+      - xpack.ml.enabled=false
+      - xpack.graph.enabled=false
+      - xpack.watcher.enabled=false
+      - bootstrap.memory_lock=true
+      - "ES_JAVA_OPTS=-Xms128m -Xmx128m"
+    ulimits:
+      memlock:
+        soft: -1
+        hard: -1
+    ports:
+      - 9200:9200
+      - 9300:9300
+
+  mongo:
+    image: mongo:latest
+    mem_limit: 350m
+    ports:
+      - 27017:27017
