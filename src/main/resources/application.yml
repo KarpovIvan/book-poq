@@ -14,7 +14,15 @@ spring:
         spring.json.use.type.headers: false
         spring.json.value.default.type: com.book.poq.model.Book
       group-id: KafkaBookGroup
-
+poq:
+  book-topic:
+    name: BookTopic
+    partitions: 2
+    replicas: 1
+  book-database-scheduler:
+    threads: 5
+    queue: 10000
+    name: database
 ---
 spring:
   profiles: dev
@@ -39,8 +47,3 @@ spring:
 poq:
   advert:
     url: http://advert-poq:8099/advert
-
-
-logging:
-  level:
-  org.springframework.data.mongodb.core.MongoTemplate: DEBUG
