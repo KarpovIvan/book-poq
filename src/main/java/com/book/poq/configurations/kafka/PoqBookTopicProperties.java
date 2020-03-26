@@ -2,12 +2,12 @@ package com.book.poq.configurations.kafka;
 
 import org.springframework.boot.context.properties.ConfigurationProperties;
 
-@ConfigurationProperties("poq.book-topic")
+@ConfigurationProperties("poq.book.topic")
 public class PoqBookTopicProperties {
 
-    private String name;
-    private int partitions;
-    private int replicas;
+    private String name = "BookTopic";
+    private int partitions = 2;
+    private int replicas = 1;
 
     public String getName() {
         return name;
