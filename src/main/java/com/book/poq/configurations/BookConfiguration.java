@@ -4,11 +4,12 @@ import com.book.poq.adapters.AdvertAdapter;
 import com.book.poq.configurations.scheduler.PoqBookDatabaseSchedulerProperties;
 import com.book.poq.repositories.BookRepository;
 import com.book.poq.repositories.impl.BookRepositoryImpl;
-import com.book.poq.repositories.mappers.ResultSet2BookMapper;
+import com.book.poq.repositories.mappers.Book2BookV1Mapper;
 import com.book.poq.services.BookService;
 import com.book.poq.services.BookValidatorService;
 import com.book.poq.services.impl.BookServiceImpl;
 import com.book.poq.services.impl.BookValidatorServiceImpl;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -32,26 +33,22 @@ public class BookConfiguration {
     }
 
     @Bean
-    public ResultSet2BookMapper resultSet2BookMapper(){
-        return new ResultSet2BookMapper();
-    }
-
-    @Bean
     public BookValidatorService bookValidatorService(){
         return new BookValidatorServiceImpl();
     }
 
     @Bean
-    public BookRepository bookRepository(DataSource dataSource, ResultSet2BookMapper resultSet2BookMapper, Scheduler scheduler){
-        return new BookRepositoryImpl(dataSource, resultSet2BookMapper, scheduler);
+    public BookRepository bookRepository(DataSource dataSource, Scheduler scheduler, ObjectMapper objectMapper){
+        return new BookRepositoryImpl(dataSource, scheduler, objectMapper);
     }
 
     @Bean
-    public BookService bookService(BookRepository bookRepository, AdvertAdapter advertAdapter, BookValidatorService bookValidatorService){
+    public BookService bookService(BookRepository bookRepository, AdvertAdapter advertAdapter, BookValidatorService bookValidatorService, Book2BookV1Mapper book2BookV1Mapper){
         return new BookServiceImpl(
                         bookRepository,
                         advertAdapter,
-                        bookValidatorService
+                        bookValidatorService,
+                        book2BookV1Mapper
         );
     }
 

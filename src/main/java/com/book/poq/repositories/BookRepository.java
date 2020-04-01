@@ -6,9 +6,9 @@ import reactor.core.publisher.Mono;
 
 public interface BookRepository {
 
-    Mono<Book> getBookById(int id);
+    <T extends Book> Mono<T> getBookById(int id, Class<T> clazz);
 
-    Flux<Book> findAll();
+    <T extends Book> Flux<T> findAll(Class<T> clazz);
 
-    void save(Book book);
+    <T extends Book> Mono<T> save(T book);
 }

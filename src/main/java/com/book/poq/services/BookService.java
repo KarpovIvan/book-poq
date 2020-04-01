@@ -6,10 +6,10 @@ import reactor.core.publisher.Mono;
 
 public interface BookService {
 
-    Mono<Book> getBookById(int id);
+    <T extends Book> Mono<T> getBookById(int id, Class<T> clazz);
 
-    Flux<Book> findAll();
+    <T extends Book> Flux<T> findAll(Class<T> clazz);
 
-    void saveWithAdvert(Book book);
+    <T extends Book> Mono<T> saveWithAdvert(T book);
 
 }

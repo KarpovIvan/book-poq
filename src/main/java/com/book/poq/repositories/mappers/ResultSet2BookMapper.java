@@ -1,18 +1,34 @@
 package com.book.poq.repositories.mappers;
 
 import com.book.poq.model.Book;
-import org.springframework.jdbc.core.RowMapper;
+import com.book.poq.utils.BookFactory;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
+import java.io.IOException;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-public class ResultSet2BookMapper implements RowMapper<Book> {
+public class ResultSet2BookMapper<T extends Book> implements PoqRowMapper<T> {
+
+    private ObjectMapper objectMapper;
+
+    public ResultSet2BookMapper(ObjectMapper objectMapper) {
+        this.objectMapper = objectMapper;
+    }
+
     @Override
-    public Book mapRow(ResultSet resultSet, int i) throws SQLException {
-        return new Book(
-                resultSet.getInt("id"),
-                resultSet.getString("title").trim(),
-                resultSet.getString("author").trim()
-        );
+    @SuppressWarnings("unchecked")
+    public T mapRow(ResultSet resultSet) throws SQLException {
+
+        try {
+            return objectMapper.readValue(
+                    resultSet.getBytes("snapshot"),
+                    BookFactory.getBookClazzByVersion(
+                            resultSet.getString("version").trim()
+                    )
+            );
+        } catch (IOException e) {
+            throw new RuntimeException("Can`t read object " + e.getMessage());
+        }
     }
 }
